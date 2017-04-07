@@ -1,8 +1,13 @@
 import { View, Text } from 'react-native'
 
-const EventListItem = () => {
+const
+
+
+const EventListItem = ({ title, location, date}) => {
     <View>
-        <Text>Event</Text>
+        <Text>{title}</Text>
+        <Text>{location}</Text>
+        <Text>{date}</Text>
     </View>
 }
 
