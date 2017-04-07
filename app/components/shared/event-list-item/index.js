@@ -1,14 +1,17 @@
+import React from 'react'
 import { View, Text } from 'react-native'
 
-const
+// const
 
 
-const EventListItem = ({ title, location, date}) => {
-    <View>
-        <Text>{title}</Text>
-        <Text>{location}</Text>
-        <Text>{date}</Text>
-    </View>
+const EventListItem = ({ event }) => {
+    return (
+        <View>
+            <Text>{event.title}</Text>
+            <Text>{event.location}</Text>
+            <Text>{event.date}</Text>
+        </View>
+    )
 }
 
 export default EventListItem;
