@@ -3,8 +3,12 @@ import { View, StyleSheet, Text} from 'react-native'
 
 class UpcomingPage extends React.Component {
     render() {
-        <View>
-            <Text>Upcoming events</Text>
-        </View>
+        return(        
+            <View style={{flex: 1}}>
+                <Text>Upcoming events</Text>
+            </View>
+        )
     }
 }
+
+export default UpcomingPage
