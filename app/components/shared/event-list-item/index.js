@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, Text } from 'react-native'
+import Months from '../../../shared/months'
 
 const styles = {
     container: {
@@ -20,12 +21,14 @@ const styles = {
 }
 
 
-const EventListItem = ({ event }) => {
-    return (
+const EventListItem = ({ event }) => {    
+
+    return (       
+
         <View style={styles.container}>
-            <Text style={styles.title}>{event.title}</Text>
-            <Text style={styles.subTitle}>{event.location}</Text>
-            <Text style={styles.subTitle}>{event.date}</Text>
+            <Text style={styles.title}>{event.name}</Text>
+            <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
+            <Text style={styles.subTitle}>{event.due}</Text>
         </View>
     )
 }
