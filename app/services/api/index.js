@@ -1,6 +1,4 @@
-const months =  ["janeiro", "fevereiro", "março", "abril", 
-                "maio", "junho", "julho", "agosto", "setembro", 
-                "outubro", "novembro", "dezembro"]
+import Months from '../../shared/months'
 
 export async function getLists() {
    let response = await fetch('https://api.trello.com/1/boards/G9GKoL5F/lists/open?fields=name,idList')
@@ -16,12 +14,12 @@ export async function getCards() {
     let lists = await getLists()    
     const listsIds = lists.map(item => item.id)
     
-    let response = await fetch('https://api.trello.com/1/boards/G9GKoL5F/cards/open?fields=desc,idList,name,due')
+    let response = await fetch('https://api.trello.com/1/boards/G9GKoL5F/cards/open?fields=desc,idList,name,due,labels')
     let responseJson = await response.json();
     
-    let filteredCards = responseJson.filter(item => listsIds.includes(item.idList) && (new Date(item.due) >= new Date()))    
+    let cards = responseJson.filter(item => listsIds.includes(item.idList) && (new Date(item.due) >= new Date()))    
     
-    filteredCards = filteredCards.sort((a, b) => {
+    cards = cards.sort((a, b) => {
         const dueDateA = new Date(a.due)
         const dueDateB = new Date(b.due)
 
@@ -33,8 +31,18 @@ export async function getCards() {
             return 0
     })   
 
+    cards.forEach((item) => {
+        let formattedData = new Date(item.due)
+        formattedData = `${Months[formattedData.getMonth()]}, ${formattedData.getDate()}`
+        
+        item.due = formattedData        
 
-    return filteredCards
+        if (item.labels && item.labels.length > 0)
+            item.location = item.labels[0].name
+    })    
+
+
+    return cards
 
     
 }
