@@ -2,7 +2,7 @@ import React from 'react'
 import { View, StyleSheet, Text, ListView } from 'react-native'
 import Header from '../shared/header'
 import EventItem from '../shared/event-list-item'
-import * as API from '../../services/api'
+import * as LocalStorage from '../../services/localStorage'
 
 const mock = [
     { title: '6º Meetup NugCE', location: 'Fortaleza', date: 'Apr, 10'},
@@ -34,7 +34,7 @@ class UpcomingPage extends React.Component {
     }
 
     async getListsFromBoard() {
-        let lists = await API.getCards()
+        let lists = await LocalStorage.getCards()
         this.setState({
             dataSource: dataSource.cloneWithRows(lists)
         })
