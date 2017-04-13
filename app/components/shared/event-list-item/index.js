@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, Text } from 'react-native'
 import Months from '../../../shared/months'
+import NotificationButton from '../notification'
 
 const styles = {
     container: {
@@ -12,7 +13,8 @@ const styles = {
         padding: 5
     },
     title: {
-        fontSize: 16
+        fontSize: 16,
+        flex:1
     },
     subTitle: {
         fontSize:12,
@@ -26,7 +28,10 @@ const EventListItem = ({ event }) => {
     return (       
 
         <View style={styles.container}>
-            <Text style={styles.title}>{event.name}</Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <Text style={styles.title}>{event.name}</Text>
+                <NotificationButton/>
+            </View>
             <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
             <Text style={styles.subTitle}>{event.due}</Text>
         </View>
