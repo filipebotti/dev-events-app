@@ -33,7 +33,8 @@ export async function getCards() {
 
     cards.forEach((item) => {
         let formattedData = new Date(item.due)
-        formattedData = `${Months[formattedData.getMonth()]}, ${formattedData.getDate()}`
+        let minutes = "0" + formattedData.getMinutes()
+        formattedData = `${Months[formattedData.getMonth()]}, ${formattedData.getDate()} at ${formattedData.getHours()}:${minutes.slice(-2)}`
         
         item.due = formattedData        
 
