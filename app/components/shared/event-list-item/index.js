@@ -30,7 +30,7 @@ const EventListItem = ({ event }) => {
         <View style={styles.container}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={styles.title}>{event.name}</Text>
-                <NotificationButton/>
+                <NotificationButton event={event}/>
             </View>
             <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
             <Text style={styles.subTitle}>{event.due}</Text>
