@@ -1,3 +1,5 @@
 export default {
-    events: []
+    events: [],
+    isFetching: false,
+    error: ''
 }
