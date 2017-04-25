@@ -1,23 +1,20 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
-
 import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import { AppRegistry } from 'react-native';
+import { createStore, combineReducers } from 'redux'
+import { Provider } from 'react-redux'
+import events from './app/reducers/events'
+import notification from './app/reducers/notification'
 import App from './app/app'
+
+let store = createStore(combineReducers({ events, notification }))
 
 
 export default class DevEventsMobile extends Component {
   render() {
     return (
-      <App/>
+      <Provider store={store}>
+        <App/>
+      </Provider>
     );
   }
 }
