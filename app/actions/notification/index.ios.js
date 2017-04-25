@@ -10,27 +10,6 @@ function scheduleLocalnotification(event) {
     })
 }
 
-function registerLocalNotification(event) {
-
-    PushNotificationIOS.getScheduledLocalNotifications((notifications) => {
-        if(notifications.length == 0) {      
-
-            scheduleLocalnotification(event)                     
-        } else {
-
-            const notification = notifications.find(item => item.userInfo.id == this.props.event.id)
-            if(notification) {
-
-                PushNotificationIOS.cancelLocalNotifications(notification.userInfo)                            
-            } else {
-
-                scheduleLocalnotification(event)                            
-            }
-        }
-    })
-}
-
-
 export function registerNotification(event) {
 
     PushNotificationIOS.checkPermissions((permission) => {
@@ -40,21 +19,31 @@ export function registerNotification(event) {
             PushNotificationIOS.requestPermissions()                         
             .then(() => {
 
-                registerLocalNotification(event)
+                scheduleLocalnotification(event)
 
                 return {
-                    type: ActionTypes.NOTIFICATION_REGISTER_IOS_SUCCESS,
+                    type: ActionTypes.NOTIFICATION_REGISTER_SUCCESS,
                     event
                 }
             })
         } else {                
 
-            registerLocalNotification(event)
+            scheduleLocalnotification(event)
             return {
-                type: ActionTypes.NOTIFICATION_REGISTER_IOS_SUCCESS,
+                type: ActionTypes.NOTIFICATION_REGISTER_SUCCESS,
                 event
             }
         }
     })
 
+}
+
+export function cancelNotification(event) {
+
+    PushNotificationIOS.cancelLocalNotifications({ id: event.id })
+
+    return {
+        type: ActionTypes.NOTIFICATION_CANCEL_SUCCESS,
+        event
+    }
 }
