@@ -10,5 +10,7 @@ export default function(state = initialState, action) {
             return Object.assign({}, state, { isFetching: false, events: action.events})
         case ActionTypes.FETCH_EVENTS_FAIL:
             return Object.assign({}, state, { isFetching: false, error: action.error})
+        default:
+            return state
     }
 }

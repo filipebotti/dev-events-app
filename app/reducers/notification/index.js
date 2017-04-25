@@ -24,6 +24,8 @@ export default function (state = initialState, action) {
             return Object.assign({}, state, registerEvent(state.events, action.event))
         case ActionTypes.NOTIFICATION_CANCEL_SUCCESS:
             return Object.assign({}, state, unregisterEvent(state.events, action.event))
+        default:
+            return state
 
     }
 }
