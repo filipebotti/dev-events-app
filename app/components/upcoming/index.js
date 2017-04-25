@@ -1,13 +1,12 @@
 import React from 'react'
 import { View, StyleSheet, Text, ListView } from 'react-native'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import * as eventActions from '../../actions/events'
 import Header from '../shared/header'
 import EventItem from '../shared/event-list-item'
 import * as LocalStorage from '../../services/localStorage'
 
-const mock = [
-    { title: '6º Meetup NugCE', location: 'Fortaleza', date: 'Apr, 10'},
-    { title: 'Flisol', location: 'Fortaleza', date: 'Apr, 10'}
-]
 
 const dataSource = new ListView.DataSource({
     rowHasChanged: (r1, r2) => r1 !== r2
@@ -24,24 +23,18 @@ class UpcomingPage extends React.Component {
             dataSource: dataSource.cloneWithRows([])
         }
 
-        this.renderEventsRow = this.renderEventsRow.bind(this)
-        this.getListsFromBoard = this.getListsFromBoard.bind(this)
-    }
-
-    componentDidMount() {
-        this.getListsFromBoard()
-        
-    }
-
-    async getListsFromBoard() {
-        let lists = await LocalStorage.getCards()
-        this.setState({
-            dataSource: dataSource.cloneWithRows(lists)
-        })
-    }
+        this.renderEventsRow = this.renderEventsRow.bind(this)        
+        this.props.eventActions.fetchEvents();
+    }    
 
     renderEventsRow(item) {
         return <EventItem event={item}/>
+    }
+
+    componentWillReceiveProps(props) {
+        this.setState({
+            dataSource: dataSource.cloneWithRows(props.events)
+        })
     }
 
     render() {
@@ -60,4 +53,11 @@ class UpcomingPage extends React.Component {
     }
 }
 
-export default UpcomingPage
+export default connect(
+    state => ({
+        events: state.events.events
+    }),
+    dispatch => ({
+        eventActions: bindActionCreators(eventActions, dispatch)
+    })
+)(UpcomingPage)
