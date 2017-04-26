@@ -8,55 +8,16 @@ class Notification extends React.Component {
     constructor(props, context) {
         super(props, context)       
 
-        this.state = {
-            registered: false
-        }        
-
         this._onPress = this._onPress.bind(this)
-        this._renderIcon = this._renderIcon.bind(this)
-        PushNotificationIOS.cancelAllLocalNotifications()
+        this._renderIcon = this._renderIcon.bind(this)        
     }
 
     _onPress() {
-        PushNotificationIOS.checkPermissions((permission) => {
-            
-            if(!permission.alert && !permission.alert && !permission.badge) {
-
-                PushNotificationIOS.requestPermissions()                         
-            } else {
-                console.log(this.props.event)
-                PushNotificationIOS.getScheduledLocalNotifications((notifications) => {
-                    if(notifications.length == 0) {
-                        
-                        PushNotificationIOS.scheduleLocalNotification({
-                            fireDate: this.props.event.date,
-                            alertBody: this.props.event.name,
-                            userInfo: { id: this.props.event.id }
-                        })
-                        this.setState({ registered: true })
-                    } else {
-
-                        const notification = notifications.find(item => item.userInfo.id == this.props.event.id)
-                        if(notification) {
-                            PushNotificationIOS.cancelLocalNotifications(notification.userInfo)
-                            this.setState({ registered: false })
-                        } else {
-                            PushNotificationIOS.scheduleLocalNotification({
-                                fireDate: this.props.event.date,
-                                alertBody: this.props.event.name,
-                                userInfo: { id: this.props.event.id }
-                            })
-                            this.setState({ registered: true })
-                        }
-
-                    }
-                })
-            }
-        })
+        this.props.onNotificationPress(this.props.event)
     }
 
     _renderIcon() {
-        if(this.state.registered) 
+        if(this.props.event.registered) 
             return <IonicIcon name="ios-notifications" size={20} color="red"/>
         else
             return  <IonicIcon name="ios-notifications-outline" size={20} color="red"/>
@@ -69,6 +30,11 @@ class Notification extends React.Component {
             </TouchableOpacity>
         )
     }
+}
+
+Notification.propTypes = {
+    onNotificationPress: React.PropTypes.func.isRequired,
+    event: React.PropTypes.object.isRequired
 }
 
 export default Notification
