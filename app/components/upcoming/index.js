@@ -23,15 +23,24 @@ class UpcomingPage extends React.Component {
             dataSource: dataSource.cloneWithRows([])
         }
 
-        this.renderEventsRow = this.renderEventsRow.bind(this)        
+        this.renderEventsRow = this.renderEventsRow.bind(this)   
+        this._onNotificationButtonPress = this._onNotificationButtonPress.bind(this)     
         this.props.eventActions.fetchEvents();
     }    
 
+    _onNotificationButtonPress(event) {
+        if(!event.registered) 
+            this.props.eventActions.registerNotification(event)
+        else 
+            this.props.eventActions.cancelNotification(event)
+    } 
+
     renderEventsRow(item) {
-        return <EventItem event={item}/>
+        return <EventItem event={item} onNotificationPress={this._onNotificationButtonPress}/>
     }
 
     componentWillReceiveProps(props) {
+        console.log(props)
         this.setState({
             dataSource: dataSource.cloneWithRows(props.events)
         })
