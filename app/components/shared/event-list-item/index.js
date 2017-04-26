@@ -23,14 +23,17 @@ const styles = {
 }
 
 
-const EventListItem = ({ event }) => {    
+const EventListItem = ({ event, onNotificationPress }) => {    
 
     return (       
 
         <View style={styles.container}>
             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Text style={styles.title}>{event.name}</Text>
-                <NotificationButton event={event}/>
+                <NotificationButton 
+                    event={event}
+                    onNotificationPress={onNotificationPress}
+                />
             </View>
             <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
             <Text style={styles.subTitle}>{event.due}</Text>
