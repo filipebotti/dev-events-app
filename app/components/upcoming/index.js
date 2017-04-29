@@ -25,6 +25,7 @@ class UpcomingPage extends React.Component {
 
         this.renderEventsRow = this.renderEventsRow.bind(this)   
         this._onNotificationButtonPress = this._onNotificationButtonPress.bind(this)     
+        this._onEventSelected = this._onEventSelected.bind(this)
         this.props.eventActions.fetchEvents();
     }    
 
@@ -35,8 +36,26 @@ class UpcomingPage extends React.Component {
             this.props.eventActions.cancelNotification(event)
     } 
 
-    renderEventsRow(item) {
-        return <EventItem event={item} onNotificationPress={this._onNotificationButtonPress}/>
+    _onEventSelected(event) {
+
+        this.props.eventActions.selectEvent(event)
+    }
+
+    renderEventsRow(item) {     
+
+        let isSelected = false
+
+        if(this.props.selectedEvent)
+            isSelected = this.props.selectedEvent.id == item.id
+        else
+            isSelected = false
+
+        return <EventItem 
+                event={item}                 
+                isSelected={isSelected}
+                onNotificationPress={this._onNotificationButtonPress}
+                onEventSelected={this._onEventSelected}
+                />
     }
 
     componentWillReceiveProps(props) {
@@ -64,7 +83,8 @@ class UpcomingPage extends React.Component {
 
 export default connect(
     state => ({
-        events: state.events.events
+        events: state.events.events,
+        selectedEvent: state.events.selectedEvent
     }),
     dispatch => ({
         eventActions: bindActionCreators(eventActions, dispatch)
