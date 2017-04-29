@@ -29,3 +29,11 @@ export function cancelNotification(event) {
     }
 }
 
+export function selectEvent(event) {
+
+    return {
+        type: ActionTypes.SELECT_EVENT,
+        event
+    }
+}
+
