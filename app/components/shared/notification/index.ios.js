@@ -17,10 +17,12 @@ class Notification extends React.Component {
     }
 
     _renderIcon() {
+        const color = this.props.event.isSelected ? 'white' : 'black'
+        
         if(this.props.event.registered) 
-            return <IonicIcon name="ios-notifications" size={20} color="red"/>
+            return <IonicIcon name="ios-notifications" size={20} color={color}/>
         else
-            return  <IonicIcon name="ios-notifications-outline" size={20} color="red"/>
+            return  <IonicIcon name="ios-notifications-outline" size={20} color={color}/>
     }
 
     render() {
