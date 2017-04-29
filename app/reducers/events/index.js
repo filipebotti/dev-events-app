@@ -28,6 +28,11 @@ export default function(state, action) {
             return Object.assign({}, state, { events: registerEvent(state.events, action.event.id)})
         case ActionTypes.NOTIFICATION_CANCEL_SUCCESS:
             return Object.assign({}, state, { events: unregisterEvent(state.events, action.event.id)})
+        case ActionTypes.SELECT_EVENT:
+            if(state.selectedEvent && state.selectedEvent.id == action.event.id)
+                return Object.assign({}, state, { selectedEvent: null })
+            else
+                return Object.assign({}, state, { selectedEvent: action.event })
         default:
             return state || initialState            
     }
