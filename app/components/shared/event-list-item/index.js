@@ -5,7 +5,6 @@ import NotificationButton from '../notification'
 
 const styles = {
     container: {
-        height: 70,
         backgroundColor: 'white',
         borderBottomColor: '#bdc3c7',
         borderBottomWidth: 0.5,        
@@ -42,6 +41,7 @@ class EventListItem extends React.Component {
         }
         this._onPress = this._onPress.bind(this)
         this._renderSubtitle = this._renderSubtitle.bind(this)
+        this.measureDescriptionText = this.measureDescriptionText.bind(this)
     }
 
     componentWillReceiveProps(props) {
@@ -54,10 +54,21 @@ class EventListItem extends React.Component {
                 toValue: toValue
             }
         ).start()
+    }
 
-        this.measure(({height}) => {
-            console.log(height)
+
+    measureDescriptionText(x, y, width, height, pageX, pageY) {
+        this.setState({
+            offset: height
         })
+    }
+
+    componentDidUpdate()
+    {
+        if(this.refs.text)
+        {
+            this.refs.text.measure(this.measureDescriptionText)
+        }
     }
 
     _onPress() {
@@ -65,6 +76,7 @@ class EventListItem extends React.Component {
     }
 
     _renderSubtitle(event) {
+        
         if(!this.props.isSelected)
         {
             const opacity = this.state.animValue.interpolate({
@@ -73,7 +85,7 @@ class EventListItem extends React.Component {
             })
 
             return (
-                <Animated.View style={[styles.subTitleContainer, { opacity: opacity }]}>
+                <Animated.View style={[styles.subTitleContainer]}>
                     <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
                     <Text style={styles.subTitle}>{event.due}</Text>
                 </Animated.View>
@@ -85,26 +97,31 @@ class EventListItem extends React.Component {
                 inputRange: [0, 1],
                 outputRange: [ 'rgb(255, 255, 255)', 'rgb(227, 227, 227)']
             })
-
+            
             return (
-                <Animated.View 
-                style={[styles.subTitleContainer, 
-                        {opacity: this.state.animValue, backgroundColor: backColor, padding: 5}]}>
-                    <Text>{event.desc}</Text>
-                </Animated.View>
+                <Animated.View
+                    ref={(ref) => { this.descricao = ref }}
+                    style={[styles.subTitleContainer, 
+                            {opacity: this.state.animValue, backgroundColor: backColor, padding: 5}]}>
+                        <Text ref="text">{event.desc}</Text>
+                </Animated.View>                
             )
         }
         
     }
+
+    
 
     render() {       
 
         const { event, isSelected } = this.props 
         event.isSelected = isSelected
 
+        const heightMax = this.state.offset == 0 ? 70 : 70 + this.state.offset
+
         const height = this.state.animValue.interpolate({
             inputRange: [0, 1],
-            outputRange: [70, 140]
+            outputRange: [70, heightMax]
         })
 
         const backColor = this.state.animValue.interpolate({
@@ -116,10 +133,10 @@ class EventListItem extends React.Component {
             inputRange: [0, 1],
             outputRange: ['rgb(0, 0, 0)', 'rgb(255,255,255)']
         })
-
+        
         return (                  
             
-            <Animated.View style={[styles.container, { height: height}]}>
+            <Animated.View style={[styles.container, { height: height }]}>
                 <TouchableOpacity style={{flex: 1}} onPress={this._onPress}>
                     <Animated.View style={[ styles.titleContainer, { backgroundColor: backColor}]}>
                         <Animated.Text style={[styles.title, { color: titleColor }]}>{event.name}</Animated.Text>
@@ -129,6 +146,8 @@ class EventListItem extends React.Component {
                         />
                     </Animated.View>
                     {this._renderSubtitle(event)}
+                    
+                    
                     
                 </TouchableOpacity>
             </Animated.View>
