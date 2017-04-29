@@ -1,5 +1,6 @@
 export default {
     events: [],
     isFetching: false,
-    error: ''
+    error: '',
+    selectedEvent: null
 }
