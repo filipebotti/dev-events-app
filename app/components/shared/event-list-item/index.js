@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity, Animated } from 'react-native'
 import Months from '../../../shared/months'
 import NotificationButton from '../notification'
 
@@ -23,22 +23,65 @@ const styles = {
 }
 
 
-const EventListItem = ({ event, onNotificationPress }) => {    
+class EventListItem extends React.Component {    
 
-    return (       
+    constructor(props, context) {
+        super(props, context)
 
-        <View style={styles.container}>
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                <Text style={styles.title}>{event.name}</Text>
-                <NotificationButton 
-                    event={event}
-                    onNotificationPress={onNotificationPress}
-                />
-            </View>
-            <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
-            <Text style={styles.subTitle}>{event.due}</Text>
-        </View>
-    )
+        this.state= {
+            height: new Animated.Value(0)
+        }
+        this._onPress = this._onPress.bind(this)
+    }
+
+    componentWillReceiveProps(props) {
+
+        const toValue = props.isSelected ? 1 : 0 
+
+        Animated.timing(
+            this.state.height,
+            {
+                toValue: toValue
+            }
+        ).start()
+    }
+
+    _onPress() {
+        this.props.onEventSelected(this.props.event)       
+    }
+
+
+    render() {       
+
+        const { event } = this.props 
+        const height = this.state.height.interpolate({
+            inputRange: [0, 1],
+            outputRange: [70, 140]
+        })
+
+        return (                  
+            
+            <Animated.View style={[styles.container, { height: height}]}>
+                <TouchableOpacity style={{flex: 1}} onPress={this._onPress}>
+                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                        <Text style={styles.title}>{event.name}</Text>
+                        <NotificationButton 
+                            event={event}
+                            onNotificationPress={this.props.onNotificationPress}
+                        />
+                    </View>
+                    <Text style={styles.subTitle}>{event.location ? event.location : "Location not defined"}</Text>
+                    <Text style={styles.subTitle}>{event.due}</Text>
+                </TouchableOpacity>
+            </Animated.View>
+        )
+    }
+}
+
+EventListItem.propTypes = {
+    onEventSelected: React.PropTypes.func,
+    onNotificationPress: React.PropTypes.func,
+    event: React.PropTypes.object.isRequired
 }
 
 export default EventListItem;
